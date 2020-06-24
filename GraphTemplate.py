@@ -24,6 +24,8 @@ class NodeTemplate(object):
 
     def __init__(self):
         pass
+    
+    def __init__(self, labelN, adjacentNod)
 
     # TODO: implement additional constructors
     # TODO: implement method for adding a connection
@@ -39,7 +41,7 @@ class MinHeapTemplate(object):
     # TODO: implement method for restructuring the min-priority Queue
     # TODO: implement method for extracting the smaller element from the min-priority Queue
 
-class NimHeapNode(object):
+class MinHeapNode(object):
     node    = None  #! reference to NodeTemplate
     parent  = None  #! reference to MinHeapNode
     left    = None  #! reference to MinHeapNode
