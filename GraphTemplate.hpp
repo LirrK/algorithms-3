@@ -2,29 +2,157 @@
 #include <string>
 #include <map>
 
+struct edge;
+class edgeList;
+class Node;
+class Graph;
+class MinHeapNode;
+class MinHeap;
 // YOU CAN USE ONLY THE VECTORS, STRINGS AND MAPS FOR THIS ASSIGNMENT!
 
-class GraphTemplate {
+/*
+struct edge {
+  edge(Node start, Node end, int edgeWeight): start_(start), end_(end), edgeWeight_(edgeWeight){}
+
+  Node start_;
+  Node end_;
+  int edgeWeight_;
+};
+
+class edgeList {
+public:
+  std::vector<edge> edgeList;
+  //int find_position_of_edge_between(Node start, Node end) {
+  //  for(int i = 0; i < edgeList.size(); ++i) {
+    //  if()
+  //  }
+  //}
+  void add(edge newEdge) {
+    edgeList.push_back(newEdge);
+  }
+  void pop(edge removeEdge) {
+    for(int i = 0; i < edgeList.size(); ++i) {
+      if(removeEdge.start_.get_label() == edgeList[i].start_.get_label() &&
+      removeEdge.end_.get_label() == edgeList[i].end_.get_label()) {
+        edgeList.erase(edgeList.front() + i);
+      }
+    }
+  }
+  void add_all(Node node) {
+
+  }
+  void pop_all(Node node) {
+
+  }
+};
+*/
+
+class Node {
 private:
-    std::vector<NodeTemplate> nodes;
-    MinHeapTemplate *minPriorityQueue;
+    /* data */
+    std::string label;
+    std::map<Node, int> adjacentNodes; // the int is for the weight of the edge
+    Node *parent = nullptr; // previous node in graph vector
+    int distance; // aka key
+
+public:
+    // Constructor
+    Node(std::string newLabel) {
+      label = newLabel;
+    }
+
+    // Destructor
+    //~Node() {
+    //
+    //};
+    
+    // Getter function for label
+    // needed for Graph::find() function
+    std::string get_label() {
+      return label;
+    }
+    
+    // Adds a connection from *this node to newNeighbourNode
+    // with a distanceTo as weight of the new connection.
+    void add_connection(Node const& newNeighbourNode, int weightOf) {
+      adjacentNodes.insert({newNeighbourNode, weightOf});
+    }
+
+    // Removes a connection from *this node to deleteNode
+    // by using map.erase() function.
+    void remove_connection(Node const&/*???*/ deleteNode) {
+      adjacentNodes.erase(deleteNode);
+    }
+    
+    // Set new parent
+    void change_parent(Node const& newParent) {
+      *this->parent = newParent;
+    }
+
+    // Set new distance
+    void change_distance(int newDistance) {
+      distance = newDistance;
+    }
+    
+};
+
+class MinHeapNode{
+private:
+    /* data */
+    Node *node;
+    MinHeapNode *parent = nullptr;
+    MinHeapNode *left = nullptr;
+    MinHeapNode *right = nullptr;
+
+public:
+    MinHeapNode(Node const& newNode) {
+      *this->node = newNode;
+    }
+    //~MinHeapNode();
+};
+
+class MinHeap {
+private:
+    //std::vector<MinHeapNode> heapNodes;
+    MinHeapNode *root;
+
+public:
+    MinHeap(MinHeapNode const& firstNode) {
+      //heapNodes.push_back(firstNode);
+      *this->root = firstNode;
+    }
+
+    ~MinHeap();
+    // TODO: implement method for restructuring the min-priority Queue
+    void restructure() {
+      
+      return;
+    }
+
+    // TODO: implement method for extracting the smaller element from the min-priority Queue
+};
+
+class Graph {
+private:
+    std::vector<Node> nodes;
+    MinHeap* minPriorityQueue;
     bool isDirected;
 
 public:
     // Constructor
-    GraphTemplate(NodeTemplate firstNode) {
+    Graph(Node const& firstNode) {
       nodes.push_back(firstNode);
     }
 
     // Destructor
-    ~GraphTemplate() {
+    ~Graph() {
       while(nodes.size() != 0) {
         nodes.pop_back();
       }
     };
 
     // Inserts a new node at the end of vector nodes
-    void add_node(NodeTemplate newNode) {
+    void add_node(Node const& newNode) {
       nodes.push_back(newNode);
     }
 
@@ -54,82 +182,17 @@ public:
     }
 
 
+    void prim() {
+      
+    }
     // TODO: implement Prim
     // TODO: implement Bellman-Ford
     // TODO: implement printGraph function that generates a file written using the dot format
 };
 
-class NodeTemplate {
-private:
-    /* data */
-    std::string label;
-    std::map<NodeTemplate, int> adjacentNodes; // the int is for the weight od the egde
-    NodeTemplate *parent = nullptr; // previous node in graph vector
-    int distance; // aka key
 
-public:
-    // Constructor
-    NodeTemplate(std::string newLabel) {
-      label = newLabel;
-    }
+int main(int argc, char* argv[])
+{
 
-    // Destructor
-    //~NodeTemplate() {
-    //
-    //};
-    
-    // Getter function for label
-    // needed for GraphTemplate::find() function
-    std::string get_label() {
-      return label;
-    }
-    
-    // Adds a connection from *this node to newNeighbourNode
-    // with a distanceTo as weight of the new connection.
-    void add_connection(NodeTemplate const& newNeighbourNode, int weightOf) {
-      adjacentNodes.insert({newNeighbourNode, weightOf});
-    }
-
-    // Removes a connection from *this node to deleteNode
-    // by using map.erase() function.
-    void remove_connection(NodeTemplate const&/*???*/ deleteNode) {
-      adjacentNodes.erase(deleteNode);
-    }
-    
-    // Set new parent
-    void change_parent(NodeTemplate const& newParent) {
-      *this->parent = newParent;
-    }
-
-    // Set new distance
-    void change_distance(int newDistance) {
-      distance = newDistance;
-    }
-    
-};
-
-class MinHeapTemplate {
-private:
-    MinHeapNodeTemplate *root;
-
-public:
-    MinHeapTemplate(/* args */);
-    ~MinHeapTemplate();
-    // TODO: implement method for restructuring the min-priority Queue
-    // TODO: implement method for extracting the smaller element from the min-priority Queue
-};
-
-class MinHeapNodeTemplate{
-private:
-    /* data */
-    NodeTemplate *node;
-    MinHeapNodeTemplate *parent;
-    MinHeapNodeTemplate *left;
-    MinHeapNodeTemplate *right;
-
-public:
-    MinHeapNodeTemplate(/* args */);
-    ~MinHeapNodeTemplate();
-
-    MinHeapNodeTemplate();
-};
+  return 0;
+}
